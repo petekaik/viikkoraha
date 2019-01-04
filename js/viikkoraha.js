@@ -80,18 +80,10 @@ jQuery(document).ready(function() {
   });
 });
 
+// Move these to configuration.js
 // Client ID and API key from the Developer Console
-var CLIENT_ID = "client-id.apps.googleusercontent.com";
-var API_KEY = "api-key";
-
 // Array of API discovery doc URLs for APIs used by the quickstart
-var DISCOVERY_DOCS = [
-  "https://sheets.googleapis.com/$discovery/rest?version=v4"
-];
-
-// Authorization scopes required by the API; multiple scopes can be
-// included, separated by spaces.
-var SCOPES = "https://www.googleapis.com/auth/spreadsheets";
+// Authorization scopes required by the API; multiple scopes can be included, separated by spaces.
 
 var authorizeButton = document.getElementById("authorize-button");
 var signoutButton = document.getElementById("signout-button");
@@ -112,10 +104,10 @@ function handleClientLoad() {
 function initClient() {
   gapi.client
     .init({
-      apiKey: API_KEY,
-      clientId: CLIENT_ID,
-      discoveryDocs: DISCOVERY_DOCS,
-      scope: SCOPES
+      apiKey: config.API_KEY,
+      clientId: config.CLIENT_ID,
+      discoveryDocs: config.DISCOVERY_DOCS,
+      scope: config.SCOPES
     })
     .then(function() {
       // Listen for sign-in state changes.
@@ -186,9 +178,8 @@ function listChores() {
   var data = "";
   gapi.client.sheets.spreadsheets.values
     .get({
-      // Define Spreadsheet ID and range in A1 notation
-      spreadsheetId: "change me",
-      range: "change me"
+      spreadsheetId: config.SPREADSHEET_ID,
+      range: config.CHORES_RANGE
     })
     .then(
       function(response) {
@@ -238,11 +229,11 @@ function bookChore(choredetails) {
     console.log("Booking a chore with values: " + choredetails);
     var params = {
       // The ID of the spreadsheet to update.
-      spreadsheetId: "change me", // TODO: Update placeholder value.
+      spreadsheetId: config.SPREADSHEET_ID, // TODO: Update placeholder value.
 
       // The A1 notation of a range to search for a logical table of data.
       // Values will be appended after the last row of the table.
-      range: environment + "!A2:G", // TODO: Update placeholder value.
+      range: config.BOOKINGS_RANGE, // TODO: Update placeholder value.
 
       // How the input data should be interpreted.
       valueInputOption: "USER_ENTERED", // TODO: Update placeholder value.
@@ -308,11 +299,11 @@ function approveChore(bookingdetails) {
     row = bookingdetails.shift();
     var params = {
       // The ID of the spreadsheet to update.
-      spreadsheetId: "change me", // TODO: Update placeholder value.
+      spreadsheetId: config.SPREADSHEET_ID, // TODO: Update placeholder value.
 
       // The A1 notation of a range to search for a logical table of data.
       // Values will be appended after the last row of the table.
-      range: environment + "!G" + row + ":H", // TODO: Update placeholder value.
+      range: "Bookings!G" + row + ":H", // TODO: Update placeholder value.
 
       // How the input data should be interpreted.
       valueInputOption: "USER_ENTERED" // TODO: Update placeholder value.
@@ -377,8 +368,8 @@ function getSummary() {
   //var seriesvalues = [];
   gapi.client.sheets.spreadsheets.values
     .get({
-      spreadsheetId: "change me",
-      range: environment + "Summat!A2:B"
+      spreadsheetId: config.SPREADSHEET_ID,
+      range: config.SUMS_RANGE
     })
     .then(
       function(response) {
@@ -430,8 +421,8 @@ function listHistory() {
   //var seriesvalues = [];
   gapi.client.sheets.spreadsheets.values
     .get({
-      spreadsheetId: "change me",
-      range: environment + "!A:G"
+      spreadsheetId: config.SPREADSHEET_ID,
+      range: "Bookings!A:G"
     })
     .then(
       function(response) {
